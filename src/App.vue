@@ -1,26 +1,57 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="container" class="flex-container">
+    <Dir
+    height="300"
+    width="300"
+    v-on:sendFileContent="setValue"
+    >
+    </Dir>
+
+    <MonacoEditor
+      height="600"
+      language="javascript"
+      :code="code"
+      :editorOptions="options"
+      @mounted="onMounted"
+      @codeChange="onCodeChange"
+      @setValue="setValue"
+    >
+    </MonacoEditor>
+
+  </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts">
 
-export default {
-  name: 'App',
+import { Options, Vue } from 'vue-class-component';
+import Dir from './components/Dir.vue';
+import MonacoEditor from 'vue-monaco-editor'
+
+@Options({
   components: {
-    HelloWorld
+    Dir,
+    MonacoEditor
+  },
+})
+export default class App extends Vue {
+
+  public editor: any = "";
+  public fileContent: any = "";
+
+  onMounted(editor: any) {
+    this.editor = editor;
   }
+
+  setValue(fileContent: string) {
+    this.editor.setValue(fileContent);
+  }
+
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.flex-container {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
